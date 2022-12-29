@@ -1,5 +1,6 @@
+# Description
 It is not to uncommon when coding in rust to find yourself defining many different structs that all dervie the same trait, are all public, or all have only public feilds. It is often said that you should never repeat yourself when coding, but in situations like those it can seem impossible not to! That is the problem that this tiny crate sets out to solve by providing 2 powerful declaritive macros, similar_structs and similar_enums.
-#Usage
+# Usage
 To declare structs with similar_structs, simply declare a struct as you usually would within a similar_structs{} but omit the "struct" keyword (you **must use a trailing comma for feilds**, otherwise you will get a cryptic error message!):
 ```rust
 similar_structs!{

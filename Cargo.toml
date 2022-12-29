@@ -1,5 +1,5 @@
 [package]
-name = "easy-shared-behaviour-macro"
+name = "similar-structs-macros"
 version = "0.1.0"
 edition = "2021"
 
