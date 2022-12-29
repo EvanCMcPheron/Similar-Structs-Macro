@@ -1,8 +1,10 @@
 # Description
-It is not to uncommon when coding in rust to find yourself defining many different structs that all dervie the same trait, are all public, or all have only public feilds. It is often said that you should never repeat yourself when coding, but in situations like those it can seem impossible not to! That is the problem that this tiny crate sets out to solve by providing 2 powerful declaritive macros, similar_structs and similar_enums.
+It is not to uncommon in rust to find yourself defining many different structs that all dervie the same trait, are all public, or all have only public feilds. It is often said that you should never repeat yourself when coding, but in situations like those it can seem impossible not to! That is the problem that this tiny crate sets out to solve by providing 2 powerful declaritive macros, similar_structs and similar_enums.
 # Usage
-To declare structs with similar_structs, simply declare a struct as you usually would within a similar_structs{} but omit the "struct" keyword (you **must use a trailing comma for feilds**, otherwise you will get a cryptic error message!):
+To declare structs with similar_structs, simply declare a struct, as you usually would, within a similar_structs!{}, but omit the "struct" keyword (you **must use a trailing comma for feilds**, otherwise you will get a cryptic error message!):
 ```rust
+use similar_structs_macros::similar_structs;
+
 similar_structs!{
     pub User {
         pub credentials: UserCredentials,
@@ -15,6 +17,8 @@ similar_structs!{
 ```
 Note that individually declaring structs and feilds as public is perfectly valid, although in this situation the macro has a much more efficient solution: you can specify to make all structs, feilds, or both public. These three examples will expand into code that is identical to the code that the snippet above will expand into:
 ```rust
+use similar_structs_macros::similar_structs;
+
 similar_structs!{
     pub structs
 
@@ -28,6 +32,8 @@ similar_structs!{
 }
 ```
 ```rust
+use similar_structs_macros::similar_structs;
+
 similar_structs!{
     pub feilds
 
@@ -41,6 +47,8 @@ similar_structs!{
 }
 ```
 ```rust
+use similar_structs_macros::similar_structs;
+
 similar_structs!{
     pub all
     
@@ -57,6 +65,8 @@ The line clarifying the default visibilty **must** come before any struct defini
 
 As for sharing derives between all the declared structs, that can also be done with a single line:
 ```rust
+use similar_structs_macros::similar_structs;
+
 similar_structs!{
     repeat #[derive(Debug, Clone)]
     pub all
