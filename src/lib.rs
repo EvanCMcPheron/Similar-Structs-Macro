@@ -5,7 +5,7 @@ macro_rules! similar_structs {
             $($fvis $fname: $ftype,)*
         })*
     };
-    (repeat #[$derives: meta]$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (repeat #[$derives: meta];$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         $vis struct $name {
@@ -13,13 +13,13 @@ macro_rules! similar_structs {
         }
         )*
     };
-    //PUB STRUCTS
-    (pub structs$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    //pub structs;
+    (pub structs;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(pub struct $name {
             $($fvis $fname: $ftype,)*
         })*
     };
-    (repeat #[$derives: meta]pub structs$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (repeat #[$derives: meta];pub structs;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         pub struct $name {
@@ -27,7 +27,7 @@ macro_rules! similar_structs {
         }
         )*
     };
-    (pub structs repeat #[$derives: meta]$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (pub structs; repeat #[$derives: meta];$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         pub struct $name {
@@ -35,13 +35,13 @@ macro_rules! similar_structs {
         }
         )*
     };
-    //PUB FEILDS
-    (pub feilds$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    //pub fields;
+    (pub fields;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $($vis struct $name {
             $(pub $fname: $ftype,)*
         })*
     };
-    (repeat #[$derives: meta]pub feilds$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (repeat #[$derives: meta];pub fields;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         $vis struct $name {
@@ -49,7 +49,7 @@ macro_rules! similar_structs {
         }
         )*
     };
-    (pub feilds repeat #[$derives: meta]$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (pub fields; repeat #[$derives: meta];$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         $vis struct $name {
@@ -57,13 +57,13 @@ macro_rules! similar_structs {
         }
         )*
     };
-    //PUB ALL
-    (pub all$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    //pub all;
+    (pub all;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(pub struct $name {
             $(pub $fname: $ftype,)*
         })*
     };
-    (repeat #[$derives: meta]pub all$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (repeat #[$derives: meta];pub all;$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         pub struct $name {
@@ -71,7 +71,7 @@ macro_rules! similar_structs {
         }
         )*
     };
-    (pub all repeat #[$derives: meta]$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
+    (pub all; repeat #[$derives: meta];$($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
         $(
         #[$derives]
         pub struct $name {
@@ -81,3 +81,44 @@ macro_rules! similar_structs {
     };
 }
 
+macro_rules! similar_enums {
+    ($($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
+        $(
+        $vis enum $name {
+            $($varient$(($($v1type, )*))*$({$($vname: $v2type, )*})*,)*
+        }
+        )*
+    };
+    (repeat #[$derives: meta]; $($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
+        $(
+        #[$derives]
+        $vis enum $name {
+            $($varient$(($($v1type, )*))*$({$($vname: $v2type, )*})*,)*
+        }
+        )*
+    };
+    //PUB ENUMS (feilds & all are not required, as varients are by default public)
+    (pub enums; $($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
+        $(
+        pub enum $name {
+            $($varient$(($($v1type, )*))*$({$($vname: $v2type, )*})*,)*
+        }
+        )*
+    };
+    (pub enums; repeat #[$derives: meta]; $($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
+        $(
+        #[$derives]
+        pub enum $name {
+            $($varient$(($($v1type, )*))*$({$($vname: $v2type, )*})*,)*
+        }
+        )*
+    };
+    (repeat #[$derives: meta]; pub enums; $($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
+        $(
+        #[$derives]
+        pub enum $name {
+            $($varient$(($($v1type, )*))*$({$($vname: $v2type, )*})*,)*
+        }
+        )*
+    };
+}
