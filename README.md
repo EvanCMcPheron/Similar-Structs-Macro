@@ -1,5 +1,5 @@
-# Description
-It is not to uncommon in rust to find yourself defining many different structs that all derive the same trait, are all public, or all have only public fields. It is often said that you should never repeat yourself when coding, but in situations like those it can seem impossible not to! That is the problem that this tiny crate sets out to solve by providing 2 powerful declaritive macros, similar_structs and similar_enums, which allow for declaring structs and enums that share derives and/or visibility in a much more concise way.
+# similar_structs_macros
+This crate provides two declarative macros to help avoid repetition when defining structs and enums that share certain traits, attributes, or visibility. The similar_structs! macro allows you to declare multiple structs at once and specify that all structs, fields, or both should be public by default. It also has the option to specify that all structs should derive certain traits or attributes by default. The similar_enums! macro functions similarly, but for enums instead of structs.
 # Usage
 To declare structs with similar_structs, simply declare a struct, as you usually would, within a similar_structs!{}, but omit the "struct" keyword (you **must use a trailing comma for fields**, otherwise you will get a cryptic error message!):
 ```rust
@@ -15,10 +15,8 @@ similar_structs!{
     }
 }
 ```
-Note that individually declaring structs and fields as public is perfectly valid, although in this situation the macro has a much more efficient solution: you can specify that all structs, fields, or both are public by default. These three examples will expand into code that is identical to the code that the snippet above will expand into:
+Note that individually declaring structs and fields as public is perfectly valid, However you can specify that all structs, fields, or both should be public by default like in the following examples that give identical outputs:
 ```rust
-use similar_structs_macros::similar_structs;
-
 similar_structs!{
     pub structs;
 
@@ -32,8 +30,6 @@ similar_structs!{
 }
 ```
 ```rust
-use similar_structs_macros::similar_structs;
-
 similar_structs!{
     pub fields;
 
@@ -47,8 +43,6 @@ similar_structs!{
 }
 ```
 ```rust
-use similar_structs_macros::similar_structs;
-
 similar_structs!{
     pub all;
     
@@ -61,12 +55,10 @@ similar_structs!{
     }
 }
 ```
-The line clarifying the default visibilty **must** come before any struct definitions. Also, the visibility clarification line must end with a semicolon.
+The line clarifying the default visibility **must** come before any struct definitions and **must** end with a semicolon.
 
-As for sharing derives between all the declared structs, that can also be done with a single line:
+You can also specify that all structs should derive certain traits or attributes by default with a "repeat #[derive(...)];" line:
 ```rust
-use similar_structs_macros::similar_structs;
-
 similar_structs!{
     repeat #[derive(Debug, Clone)];
     pub all;
@@ -80,31 +72,18 @@ similar_structs!{
     }
 }
 ```
-*Note that the repeat line must also end with a semicolon*
-
-In expanded code, this will copy in the derive line for every single struct definitions. This should also work for sharing attributes between structs, but that is untested, and as of now you can only have one "repeat" line per macro. It is also perfectly valid to have the repeat line come after the default visibility line, as long as they both come before any struct definitions. The code snippet above will expand into:
+This will copy the #[derive(Debug, Clone)] line for every struct definition. It should also work for sharing attributes between structs, although this has not been tested. You can only have one repeat line per macro, and it must end with a semicolon. The repeat line can come before or after the default visibility line, as long as they both come before any struct definitions.
+The similar_enums! macro functions similarly to similar_structs!, but for enums instead of structs, and only has the option to specify that all enums should be public by default:
 ```rust
-#[derive(Debug, Clone)]
-pub struct User {
-    pub credentials: UserCredentials,
-}
-#[derive(Debug, Clone)]
-pub struct UserCredentials {
-    pub username: String,
-    pub password: String,
-}
-```
-Is the difference minor? Yes. However, there is an imrpovement in legibility and repetetiveness, and the difference will only grow as the amount of similar structs declared grows.
+use similar_structs_macros::similar_enums;
 
-similar_enums! is very similar, with the exception that it creates enums instead, and instead of pub structs/feilds/all there is only pub enums. Here's an example of it's usage:
-```rust
 similar_enums!{
     pub enums;
     repeat #[derive(Clone, Debug)];
 
     State {
         Alive(usize),
-        Dead{
+        Dead {
             is_buried: bool,
             is_cremated: bool,
         },
@@ -116,4 +95,35 @@ similar_enums!{
     }
 }
 ```
-Could enums and structs both be fat into one declarative macro? Absolutely! This crate may be updated in the future to include a all-encompassing macro like that. However, for now using two macros shouldn't make a huge difference.
+Here's an example of what the macros expand into
+
+The similar_structs! example above expands into:
+```rust
+#[derive(Debug, Clone)]
+pub struct User {
+    pub credentials: UserCredentials,
+}
+#[derive(Debug, Clone)]
+pub struct UserCredentials {
+    pub username: String,
+    pub password: String,
+}
+```
+The similar_enums! example above expands into:
+```rust
+#[derive(Clone, Debug)]
+pub enum State {
+    Alive(usize),
+    Dead {
+        is_buried: bool,
+        is_cremated: bool,
+    }
+}
+#[derive(Clone, Debug)]
+pub enum Color {
+    Blue,
+    Grey,
+    Black,
+}
+```
+While the difference is minor, the declarations using the macros are less cluttered, more concise, and most importantly less repetative.
