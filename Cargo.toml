@@ -4,7 +4,7 @@ description = "Quality-of-life macros for more concise struct/enum definitions"
 readme = "README.md"
 repository = "https://github.com/EvanCMcPheron/Similar-Structs-Macro"
 license = "MIT OR Apache-2.0"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Evan McPheron"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

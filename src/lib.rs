@@ -1,3 +1,4 @@
+#[macro_export]
 macro_rules! similar_structs {
     //NO PUBS
     ($($vis: vis $name: ident {$($fvis:vis $fname: ident: $ftype: ty,)*})*) => {
@@ -81,6 +82,7 @@ macro_rules! similar_structs {
     };
 }
 
+#[macro_export]
 macro_rules! similar_enums {
     ($($vis: vis $name: ident {$($varient: ident$(($($v1type: ty)*))?$({$($vname: ident: $v2type: ty,)*})?,)*})*) => {
         $(
